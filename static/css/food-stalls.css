@@ -1,0 +1,100 @@
+main {
+    background-image: url(../img/jcu-canteen.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 -150px;
+}
+
+.main__darkener {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+main .container {
+    padding-top: 30px;
+    padding-bottom: 30px
+}
+
+main h1 {
+    color: white;
+    font-size: 32px;
+    text-align: center;
+}
+
+.food-stalls {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+    justify-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 0;
+}
+
+.food-stalls__item {
+    width: 200px;
+    height: 200px;
+    background-color: white;
+    border-radius: 30px;
+    box-shadow: 0px 0px 50px 0px #000000;
+}
+
+.food-stalls__item h2 {
+    font-size: 24px;
+    color: white;
+}
+
+.food-stalls__item__darkener {
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mala {
+    background-image: url(../img/mala-food.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: -30px;
+}
+
+.indian {
+    background-image: url(../img/indian-food.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.chicken-rice {
+    background-image: url(../img/chicken-rice-food.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: -47px;
+}
+
+.korean {
+    background-image: url(../img/korean-food.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: -40px;
+}
+
+.japanese {
+    background-image: url(../img/japanese-food.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: -50px;
+}
+
+.chinese {
+    background-image: url(../img/chinese-food.webp);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
