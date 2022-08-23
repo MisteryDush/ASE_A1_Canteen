@@ -12,11 +12,18 @@
     <div class="container">
         <div class="header">
             <img src="../static/img/jcu-logo.png" alt="">
+            <ul class="nav-bar">
+                <li class="nav-bar__item"><i class="fa-solid fa-cart-shopping"></i></li>
+                <li class="nav-bar__item"><a href="{{ url_for('settings') }}">Settings</a></li>
+                <li class="nav-bar__item"><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
         </div>
     </div>
 </header>
 
-{% block content %}{% endblock %}
+{% block content %}
+
+{% endblock %}
 
 <div class="jcu_footer__wrapper upper snipcss-TbvFp">
     <div class="jcu_footer__inner">

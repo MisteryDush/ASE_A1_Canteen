@@ -18,5 +18,20 @@ def settings():
     return 'settings!'
 
 
+@app.route('/login')
+def login():
+    return "Login"
+
+
+@app.route('/logout')
+def logout():
+    return "Logout"
+
+
+@app.route('/sign-up')
+def sign_up():
+    return "Sign Up"
+
+
 if __name__ == '__main__':
     app.run()
