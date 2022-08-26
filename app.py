@@ -20,6 +20,7 @@ class Stall(db.Model):
     name = db.Column(db.String(length=30))
     filename = db.Column(db.Text)
     data = db.Column(db.LargeBinary)
+    dishes = db.relationship('Dish', backref='stalls')
 
     def __init__(self, name, filename, data):
         self.name = name
@@ -27,19 +28,28 @@ class Stall(db.Model):
         self.data = data
 
 
+class Dish(db.Model):
+    __tablename__ = 'dishes'
+    dish_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(length=50))
+    filename = db.Column(db.Text)
+    data = db.Column(db.LargeBinary)
+    price = db.Column(db.Integer)
+    stall_id = db.Column(db.Integer, db.ForeignKey('stalls.stall_id'))
+
+
 @app.route('/')
-def all_stalls():  # put application's code here
+def all_stalls():
     stalls = Stall.query.all()
     for stall in stalls:
         stall.img = base64.b64encode(stall.data).decode("utf-8")
-    img = stalls[1].img
-    print(len(img))
     return render_template('index.html', stalls=stalls)
 
 
-@app.route('/menu')
-def hello_home():  # put application's code here
-    return render_template('menu.html')
+@app.route('/menu/<int:stall_id>')
+def menu(stall_id):
+    stall = Stall.query.get(stall_id)
+    return render_template('menu.html', stall=stall)
 
 
 @app.route('/settings')
@@ -68,7 +78,7 @@ def add():
         file = request.files['file']
         data = file.read()
         name = file.filename
-        add_entry(request.form['name'], name, data)
+        add_entry(request.form['name'], name, data, 'stall')
         return redirect(url_for('all'))
     return render_template('add.html')
 
@@ -82,10 +92,11 @@ def all():
     return render_template('all.html', stalls=stalls)
 
 
-def add_entry(name, filename, data):
-    entry = Stall(name, filename, data)
-    db.session.add(entry)
-    db.session.commit()
+def add_entry(name, filename, data, entity):
+    if entity == 'stall':
+        entry = Stall(name, filename, data)
+        db.session.add(entry)
+        db.session.commit()
 
 
 if __name__ == '__main__':
