@@ -5,9 +5,12 @@
     <title></title>
 </head>
 <body>
-<form action="{{ request.path }}" method="post">
+<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
     <label for="name">Name</label><br>
-    <input type="text" name="name" placeholder="Name"/><br>
+    <label>
+        <input type="text" name="name" placeholder="Name"/>
+    </label><br>
+    <input type="file" name="file">
     <input type="submit" value="Submit"/>
 </form>
 <a href={{ url_for('all') }}></a>

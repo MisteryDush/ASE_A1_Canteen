@@ -40,7 +40,7 @@ main h1 {
     height: 200px;
     background-color: white;
     border-radius: 30px;
-    box-shadow: 0px 0px 50px 0px #000000;
+    box-shadow: 0 0 50px 0 #000000;
 }
 
 .food-stalls__item h2 {
