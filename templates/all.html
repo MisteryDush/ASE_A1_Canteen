@@ -1,5 +1,21 @@
-{% for stall in stalls %}
-    <h1>Stall {{ stall.stall_id }}</h1>
-    <h2>{{ stall.name }}</h2>
-    <img src="data:;base64,{{ stall.img }}">
-{% endfor %}
+{% extends 'layout.html' %}
+{% block content %}
+    <main>
+        <div class="main__darkener">
+            <div class="container">
+                <h1>Admin Page</h1>
+                <div class="food-stalls" style="display: flex; flex-direction: column">
+                    {% for stall in stalls %}
+                        <h1>Stall {{ stall.stall_id }}</h1>
+                        <h2>{{ stall.name }}</h2>
+                        <img src="data:;base64,{{ stall.img }}" alt="{{ stall.filename }}" style="width: 400px">
+                        <a href="{{ url_for('edit_stall', stall_id = stall.stall_id) }}"><input type="submit"
+                                                                                          value="Edit"></a>
+                        <a href="{{ url_for('delete_stall', stall_id = stall.stall_id) }}"><input type="submit" value="Delete"></a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

@@ -46,6 +46,11 @@ def all_stalls():
     return render_template('index.html', stalls=stalls)
 
 
+@app.route('/add_dish/<int:stall_id>')
+def add_dish(stall_id):
+    return f"Hi {stall_id}"
+
+
 @app.route('/menu/<int:stall_id>')
 def menu(stall_id):
     stall = Stall.query.get(stall_id)
@@ -88,8 +93,9 @@ def all():
     stalls = Stall.query.all()
     for stall in stalls:
         stall.img = base64.b64encode(stall.data).decode("utf-8")
-    print(stalls[0].data)
     return render_template('all.html', stalls=stalls)
+
+
 
 
 def add_entry(name, filename, data, entity):

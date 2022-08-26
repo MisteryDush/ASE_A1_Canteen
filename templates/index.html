@@ -11,7 +11,6 @@
                 <h1>Canteen Food Stalls</h1>
                 <div class="food-stalls">
                     {% for stall in stalls %}
-                        <form action="menu.html" method="get">
                             <a href="{{ url_for('menu', stall_id = stall.stall_id) }}">
                                 <div class="food-stalls__item"
                                      style="background-image: url('data:;base64,{{ stall.img }}')">
@@ -20,7 +19,6 @@
                                     </div>
                                 </div>
                             </a>
-                        </form>
                     {% endfor %}
                 </div>
             </div>
