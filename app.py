@@ -47,9 +47,7 @@ class Dish(db.Model):
 
 @app.route('/')
 def all_stalls():
-    stalls = Stall.query.all()
-    for stall in stalls:
-        stall.img = base64.b64encode(stall.data).decode("utf-8")
+    stalls = encode_img(Stall.query.all())
     return render_template('index.html', stalls=stalls)
 
 
@@ -62,17 +60,14 @@ def add_dish(stall_id):
         dish_name = request.form['name']
         price = float(request.form['price'])
         add_dish_db(dish_name, price, stall_id, data, filename)
-    dishes = Dish.query.filter_by(stall_id=stall_id)
-    for dish in dishes:
-        dish.img = base64.b64encode(dish.data).decode("utf-8")
+    dishes = encode_img(list(Dish.query.filter_by(stall_id=stall_id)))
+
     return render_template('add_dish.html', stall_id=stall_id, dishes=dishes)
 
 
 @app.route('/menu/<int:stall_id>')
 def menu(stall_id):
-    dishes = Dish.query.filter_by(stall_id=stall_id)
-    for dish in dishes:
-        dish.img = base64.b64encode(dish.data).decode("utf-8")
+    dishes = encode_img(list(Dish.query.filter_by(stall_id=stall_id)))
     return render_template('menu.html', dishes=dishes)
 
 
@@ -109,9 +104,7 @@ def add():
 
 @app.route('/all')
 def all():
-    stalls = Stall.query.all()
-    for stall in stalls:
-        stall.img = base64.b64encode(stall.data).decode("utf-8")
+    stalls = encode_img(Stall.query.all())
     return render_template('all.html', stalls=stalls)
 
 
@@ -125,6 +118,12 @@ def add_dish_db(name, price, stall, data, filename):
     entry = Dish(name, filename, data, price, stall)
     db.session.add(entry)
     db.session.commit()
+
+
+def encode_img(entities):
+    for entity in entities:
+        entity.img = base64.b64encode(entity.data).decode("utf-8")
+    return entities
 
 
 @app.route('/delete-stall/<int:stall_id>')
