@@ -13,9 +13,9 @@
                 <img src="../static/img/jcu-logo-white.svg" alt="">
             </div>
 
-            <form class="login-form" action="">
-                <input class="login-form__login" type="text" placeholder="User Name e.g. jc123456">
-                <input class="login-form__password" type="password" placeholder="Password">
+            <form action="{{ request.path }}" class="login-form" method="post">
+                <input class="login-form__login" type="text" name="username" placeholder="User Name e.g. jc123456">
+                <input class="login-form__password" type="password" name="password" placeholder="Password">
                 <button class="login-form__button" type="submit">Log In</button>
 
                 <div class="login-form__helpers">
