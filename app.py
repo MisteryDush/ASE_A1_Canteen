@@ -37,6 +37,13 @@ class Dish(db.Model):
     price = db.Column(db.Integer)
     stall_id = db.Column(db.Integer, db.ForeignKey('stalls.stall_id'))
 
+    def __init__(self, name, filename, data, price, stall_id):
+        self.name = name
+        self.filename = filename
+        self.data = data
+        self.price = price
+        self.stall_id = stall_id
+
 
 @app.route('/')
 def all_stalls():
@@ -46,15 +53,27 @@ def all_stalls():
     return render_template('index.html', stalls=stalls)
 
 
-@app.route('/add_dish/<int:stall_id>')
+@app.route('/add-dish/<int:stall_id>', methods=['GET', 'POST'])
 def add_dish(stall_id):
-    return f"Hi {stall_id}"
+    if request.method == "POST":
+        file = request.files['file']
+        data = file.read()
+        filename = file.filename
+        dish_name = request.form['name']
+        price = float(request.form['price'])
+        add_dish_db(dish_name, price, stall_id, data, filename)
+    dishes = Dish.query.filter_by(stall_id=stall_id)
+    for dish in dishes:
+        dish.img = base64.b64encode(dish.data).decode("utf-8")
+    return render_template('add_dish.html', stall_id=stall_id, dishes=dishes)
 
 
 @app.route('/menu/<int:stall_id>')
 def menu(stall_id):
-    stall = Stall.query.get(stall_id)
-    return render_template('menu.html', stall=stall)
+    dishes = Dish.query.filter_by(stall_id=stall_id)
+    for dish in dishes:
+        dish.img = base64.b64encode(dish.data).decode("utf-8")
+    return render_template('menu.html', dishes=dishes)
 
 
 @app.route('/settings')
@@ -83,7 +102,7 @@ def add():
         file = request.files['file']
         data = file.read()
         name = file.filename
-        add_entry(request.form['name'], name, data, 'stall')
+        add_entry(request.form['name'], name, data)
         return redirect(url_for('all'))
     return render_template('add.html')
 
@@ -96,13 +115,21 @@ def all():
     return render_template('all.html', stalls=stalls)
 
 
+def add_entry(name, filename, data):
+    entry = Stall(name, filename, data)
+    db.session.add(entry)
+    db.session.commit()
 
 
-def add_entry(name, filename, data, entity):
-    if entity == 'stall':
-        entry = Stall(name, filename, data)
-        db.session.add(entry)
-        db.session.commit()
+def add_dish_db(name, price, stall, data, filename):
+    entry = Dish(name, filename, data, price, stall)
+    db.session.add(entry)
+    db.session.commit()
+
+
+@app.route('/delete-stall/<int:stall_id>')
+def delete_stall(stall_id):
+    return f"Deleted {stall_id}!"
 
 
 if __name__ == '__main__':
