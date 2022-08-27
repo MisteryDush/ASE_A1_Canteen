@@ -1,11 +1,10 @@
 # Advancde software engineering Assignment 1 - JCU Canteen Website
 
-### Setting up venv
+### Setting up the venv
 
 ```
-virtualvenv venv
-source myproject/venv/bin/activate
-pip freeze myproject/requirements.txt
-
+python3 -m virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
