@@ -5,11 +5,25 @@
     <title>Add a dish</title>
 </head>
 <body>
-    <form action="{{ request.path }}" method="post" enctype="multipart/form-data">
+<div style="display: flex; flex-direction: column">
+    <div style="display: flex; flex-direction: row">
+        {% for dish in dishes %}
+            <h1>Stall {{ dish.dish_id }}</h1>
+            <h2>{{ dish.name }}</h2>
+            <h2>{{ dish.price }}</h2>
+            <h2>{{ dish.stall_id }}</h2>
+            <img src="data:;base64,{{ dish.img }}" alt="{{ dish.filename }}" style="width: 400px">
+        {% endfor %}
+    </div>
+</div>
+<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
     <label for="name">Name</label><br>
     <label>
         <input type="text" name="name" placeholder="Name"/>
     </label><br>
+    <label>
+        <input type="text" name="price" placeholder="Price"/>
+    </label>
     <input type="file" name="file">
     <input type="submit" value="Submit"/>
 </form>
