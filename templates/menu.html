@@ -1,28 +1,29 @@
 {% extends 'layout.html' %}
 {% block content %}
 
-<main>
-    <div class="menu">
-        <div class="main__darkener">
-            <div class="container">
-                <h1>Menu</h1>
-                {% for dish in dishes %}
-                <div class="main-menu">
-                    <div class="menu__item" style="background-image: url('data:;base64,{{ dish.img }}')">
-                        <h2>{{ dish.name }}</h2>
-                        <h3>Add</h3>
-                        <p>{{ dish.price }}$</p>
-                        <div class="darkener"></div>
-                        <div class="dark-blue-circle"></div>
-                        <div class="blue-box"></div>
-                        <div class="blue-oval"></div>
+    <main>
+        <div class="menu">
+            <div class="main__darkener">
+                <div class="container">
+                    <h1>Menu</h1>
+                    <div class="main-menu">
+                        {% for dish in dishes %}
+                            <div class="menu__item" style="background-image: url('data:;base64,{{ dish.img }}')">
+                                <h2>{{ dish.name }}</h2>
+                                <h3>Add</h3>
+                                <p>{{ dish.price }}$</p>
+                                <div class="darkener"></div>
+                                <div class="dark-blue-circle"></div>
+                                <div class="blue-box"></div>
+                                <div class="blue-oval"></div>
+                            </div>
+                        {% endfor %}
                     </div>
+
                 </div>
-                {% endfor %}
             </div>
+
+
         </div>
-    
-        
-    </div>
-</main>
+    </main>
 {% endblock %}
