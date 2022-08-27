@@ -6,18 +6,19 @@
         <div class="main__darkener">
             <div class="container">
                 <h1>Menu</h1>
-    
+                {% for dish in dishes %}
                 <div class="main-menu">
-                    <div class="menu__item">
-                        <h2>Hotplate Chicken Set</h2>
+                    <div class="menu__item" style="background-image: url('data:;base64,{{ dish.img }}')">
+                        <h2>{{ dish.name }}</h2>
                         <h3>Add</h3>
-                        <p>$6</p>
+                        <p>{{ dish.price }}</p>
                         <div class="darkener"></div>
                         <div class="dark-blue-circle"></div>
                         <div class="blue-box"></div>
                         <div class="blue-oval"></div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     

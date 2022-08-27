@@ -9,7 +9,7 @@
                         <h1>Stall {{ stall.stall_id }}</h1>
                         <h2>{{ stall.name }}</h2>
                         <img src="data:;base64,{{ stall.img }}" alt="{{ stall.filename }}" style="width: 400px">
-                        <a href="{{ url_for('edit_stall', stall_id = stall.stall_id) }}"><input type="submit"
+                        <a href="{{ url_for('add_dish', stall_id = stall.stall_id) }}"><input type="submit"
                                                                                           value="Edit"></a>
                         <a href="{{ url_for('delete_stall', stall_id = stall.stall_id) }}"><input type="submit" value="Delete"></a>
                     {% endfor %}
