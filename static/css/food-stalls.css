@@ -35,66 +35,38 @@ main h1 {
     z-index: 0;
 }
 
-.food-stalls__item {
+.card {
     width: 200px;
     height: 200px;
-    background-color: white;
     border-radius: 30px;
-    box-shadow: 0 0 50px 0 #000000;
+}
+
+.food-stalls__item {
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: -40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
 .food-stalls__item h2 {
     font-size: 24px;
-    color: white;
+    color: #FFF;
+    position: relative;
+    z-index: 2;
 }
 
-.food-stalls__item__darkener {
-    width: 200px;
-    height: 200px;
-    background-color: rgba(0, 0, 0, 0.3);
+.food-stalls__item_darkener {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
     border-radius: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.mala {
-    background-image: url(../img/mala-food.jpeg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: -30px;
-}
-
-.indian {
-    background-image: url(../img/indian-food.jpeg);
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.chicken-rice {
-    background-image: url(../img/chicken-rice-food.jpeg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: -47px;
-}
-
-.korean {
-    background-image: url(../img/korean-food.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: -40px;
-}
-
-.japanese {
-    background-image: url(../img/japanese-food.jpeg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: -50px;
-}
-
-.chinese {
-    background-image: url(../img/chinese-food.webp);
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
