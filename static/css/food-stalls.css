@@ -28,6 +28,7 @@ main h1 {
     margin-bottom: 30px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    min-height: 600px;
     gap: 50px;
     justify-items: center;
     justify-content: space-between;
