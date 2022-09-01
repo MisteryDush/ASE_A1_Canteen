@@ -93,7 +93,8 @@ def all_stalls():
 
 @app.route('/add-dish/<int:stall_id>', methods=['GET', 'POST'])
 @login_required
-def add_dish(stall_id):  # function for admins and stall owners to add dishes
+def add_dish(stall_id):
+    """function for admins and stall owners to add dishes"""
     if check_role():
         if request.method == "POST":
             file = request.files['file']
@@ -109,7 +110,8 @@ def add_dish(stall_id):  # function for admins and stall owners to add dishes
 
 @app.route('/menu/<int:stall_id>')
 @login_required
-def menu(stall_id):  # page to display menu of a particular stall
+def menu(stall_id):
+    """page to display menu of a particular stall"""
     dishes = encode_img(list(Dish.query.filter_by(stall_id=stall_id)))
     return render_template('menu.html', dishes=dishes)
 
@@ -123,6 +125,7 @@ def settings():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    """main login page"""
     if request.method == "POST":
         user = User.query.filter_by(user_id=request.form["username"]).first()
         pswd = request.form['password']
@@ -142,6 +145,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    """logout page"""
     logout_user()
     return redirect(url_for('all_stalls'))
 
