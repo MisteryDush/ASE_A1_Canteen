@@ -16,7 +16,7 @@
                                     </div>
                                     <div class="card__image_darkener"></div>
                                 </div>
-                                <a href="#" class="card__add">
+                                <a href="{{ url_for('add_to_cart', picked_dish_id = dish.dish_id) }}" class="card__add">
                                     <p class="card__add_text">Add</p>
                                 </a>
                             </div>
