@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Owner</title>
+</head>
+<body>
+<form action="{{ request.path }}" method="post">
+    <label for="name">Name</label><br>
+    <label>
+        <input type="text" name="username" placeholder="Username"/>
+    </label><br>
+    <label>
+        <input type="text" name="password" placeholder="Password"/>
+    </label>
+    <select name="chosen_stall" method="GET" action="/">
+        <option value="{{ stalls[0].stall_id }}" selected>{{ stalls[0].name }}</option>
+        {% for stall in stalls[1:] %}
+            <option value="{{ stall.stall_id }}">{{ stall.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Submit">
+</form>
+<div style="display: flex; flex-direction: column">
+    {% for owner in owners %}
+        <form action="{{ url_for('delete_owner', owner_id=owner.user_id) }}">
+            <a>{{ owner.user_id }}</a>
+            <a>{{ owner.stall_id }}</a>
+            <input type="submit" value="Delete">
+        </form>
+    {% endfor %}
+</div>
+</body>
+</html>

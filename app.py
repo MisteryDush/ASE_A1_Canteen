@@ -69,6 +69,7 @@ class User(UserMixin, db.Model):
     user_id = db.Column(db.Text, primary_key=True)
     password = db.Column(db.Text)
     roles = db.Column(db.String(length=25))
+    stall_id = db.Column(db.Integer, db.ForeignKey('stalls.stall_id'), nullable=True)
     cart = []
 
     def __init__(self, user_id, password, role):
@@ -186,14 +187,43 @@ def add_to_cart(picked_dish_id):
 @login_required
 def delete_stall(stall_id):
     if check_role():
-        return f"Deleted {stall_id}!"
-    return redirect(url_for('all_stalls'))
+        stall = Stall.query.filter_by(stall_id=stall_id).first()
+        db.session.delete(stall)
+        db.session.commit()
+        return redirect(url_for('all'))
 
 
 @app.route('/checkout')
 @login_required
 def checkout():
     return render_template('checkout.html', cart=current_user.cart)
+
+
+@app.route('/add-owner', methods=['GET', 'POST'])
+@login_required
+def add_owner():
+    if request.method == 'POST':
+        if check_role():
+            username = request.form['username']
+            password = generate_password_hash(request.form['password'])
+            stall_id = int(request.form['chosen_stall'])
+            print(stall_id)
+            user = User(username, password, 'Stall owner')
+            user.stall_id = stall_id
+            add_owner_db(user)
+    owners = User.query.filter_by(roles='Stall owner').all()
+    stalls = Stall.query.all()
+    return render_template('add_owner.html', owners=owners, stalls=stalls)
+
+
+@app.route('/delete-owner/<owner_id>')
+@login_required
+def delete_owner(owner_id):
+    if check_role():
+        owner = User.query.filter_by(user_id=owner_id).first()
+        db.session.delete(owner)
+        db.session.commit()
+        return redirect(url_for('add_owner'))
 
 
 def add_entry(name, filename, data):
@@ -218,8 +248,13 @@ def encode_img(entities):
     return entities
 
 
+def add_owner_db(owner):
+    db.session.add(owner)
+    db.session.commit()
+
+
 def check_role():
-    return True if current_user.roles == 'admin' else False
+    return True if current_user.roles == 'Admin' else False
 
 
 if __name__ == '__main__':
