@@ -14,6 +14,8 @@ from flask_login import (
     login_required,
 )
 
+"""Setting up the app and connection with the database"""
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
@@ -27,6 +29,8 @@ login_manager.login_view = 'login'
 login_manager.init_app(app)
 
 db = SQLAlchemy(app)
+
+"""Database entities"""
 
 
 class Stall(db.Model):
@@ -65,6 +69,7 @@ class User(UserMixin, db.Model):
     user_id = db.Column(db.Text, primary_key=True)
     password = db.Column(db.Text)
     roles = db.Column(db.String(length=25))
+    cart = []
 
     def __init__(self, user_id, password, role):
         self.user_id = user_id
@@ -73,6 +78,9 @@ class User(UserMixin, db.Model):
 
     def get_id(self):
         return self.user_id
+
+
+"""App functions"""
 
 
 @app.route('/')
@@ -84,7 +92,7 @@ def all_stalls():
 
 @app.route('/add-dish/<int:stall_id>', methods=['GET', 'POST'])
 @login_required
-def add_dish(stall_id):
+def add_dish(stall_id):  # function for admins and stall owners to add dishes
     if check_role():
         if request.method == "POST":
             file = request.files['file']
@@ -100,11 +108,12 @@ def add_dish(stall_id):
 
 @app.route('/menu/<int:stall_id>')
 @login_required
-def menu(stall_id):
+def menu(stall_id):  # page to display menu of a particular stall
     dishes = encode_img(list(Dish.query.filter_by(stall_id=stall_id)))
     return render_template('menu.html', dishes=dishes)
 
 
+# TODO: Finish settings page
 @app.route('/settings')
 @login_required
 def settings():
@@ -150,10 +159,6 @@ def add():
     return redirect(url_for('all_stalls'))
 
 
-def check_role():
-    return True if current_user.roles == 'admin' else False
-
-
 @app.route('/all')
 @login_required
 def all():
@@ -161,6 +166,34 @@ def all():
         stalls = encode_img(Stall.query.all())
         return render_template('all.html', stalls=stalls)
     return redirect(url_for('all_stalls'))
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter_by(user_id=user_id).first()
+
+
+@app.route('/add-to-cart/<int:picked_dish_id>', methods=['GET', 'POST'])
+@login_required
+def add_to_cart(picked_dish_id):
+    dish = Dish.query.filter_by(dish_id=picked_dish_id).first()
+    current_user.cart.append(dish)
+    print(current_user.cart)
+    return render_template('add_to_cart.html', dish=dish)
+
+
+@app.route('/delete-stall/<int:stall_id>')
+@login_required
+def delete_stall(stall_id):
+    if check_role():
+        return f"Deleted {stall_id}!"
+    return redirect(url_for('all_stalls'))
+
+
+@app.route('/checkout')
+@login_required
+def checkout():
+    return render_template('checkout.html', cart=current_user.cart)
 
 
 def add_entry(name, filename, data):
@@ -179,23 +212,14 @@ def add_dish_db(name, price, stall, data, filename):
     return redirect(url_for('all_stalls'))
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.filter_by(user_id=user_id).first()
-
-
 def encode_img(entities):
     for entity in entities:
         entity.img = base64.b64encode(entity.data).decode("utf-8")
     return entities
 
 
-@app.route('/delete-stall/<int:stall_id>')
-@login_required
-def delete_stall(stall_id):
-    if check_role():
-        return f"Deleted {stall_id}!"
-    return redirect(url_for('all_stalls'))
+def check_role():
+    return True if current_user.roles == 'admin' else False
 
 
 if __name__ == '__main__':
