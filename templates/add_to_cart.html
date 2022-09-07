@@ -3,9 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Add to cart</title>
+    <style>
+        body {
+            font-family: helvetica, Arial, sans-serif;
+            background-color: #1f2223;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #FFF;
+        }
+
+        body p {
+            font-size: 32px;
+        }
+
+        .success {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
-{{ dish.name }} added!
-<!-- TODO: Create css -->
+    <div class="success" style="background-image: url(../static/img/SuccessCircle.svg); background-size: cover; background-repeat: no-repeat;">
+        <img src="../static/img/SuccessTick.svg" alt="">
+    </div>
+    
+    <p>{{ dish.name }} added!</p>
 </body>
 </html>
