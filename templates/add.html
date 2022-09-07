@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Add Menu Item</title>
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/add.css">
 </head>
 <body>
-<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
-    <label for="name">Name</label><br>
-    <label>
-        <input type="text" name="name" placeholder="Name"/>
-    </label><br>
-    <input type="file" name="file">
-    <input type="submit" value="Submit"/>
-</form>
-<a href={{ url_for('all') }}></a>
+    <form class="form" action="{{ request.path }}" method="post" enctype="multipart/form-data">
+
+        <div class="container">
+            <label class="form__name" for="name">Name</label>
+            <input class="form__input" type="text" name="name" placeholder="Name">
+            <input class="form__file" type="file" name="file">
+            <button class="form__submit" type="submit" value="Submit">Submit</button>
+        </div>
+        
+    </form>
 </body>
 </html>
