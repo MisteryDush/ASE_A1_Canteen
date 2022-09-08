@@ -138,6 +138,8 @@ def login():
             flash("Error!")
             return render_template('login.html')
         login_user(user, False)
+        if current_user.roles == 'Admin':
+            return redirect(url_for('admin_dashboard'))
         return redirect(url_for('all_stalls'))
     return render_template('login.html', form='')
 
@@ -148,6 +150,12 @@ def logout():
     """logout page"""
     logout_user()
     return redirect(url_for('all_stalls'))
+
+@app.route('/admin-dashboard')
+@login_required
+def admin_dashboard():
+    if check_role():
+        return render_template('admin_dashboard.html')
 
 
 @app.route('/add', methods=["GET", "POST"])
