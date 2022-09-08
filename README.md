@@ -19,3 +19,25 @@ venv/Scripts/activate
 pip install -r requirements.txt
 ```
 
+### Available accounts for testing
+
+#### Login and password for admin
+
+```
+login: admin
+password: admin
+```
+
+#### Login and password for student
+
+```
+login: jc7900031
+password: 123
+```
+
+#### Login and password for stall owner
+
+```
+login: chicken_rice
+password: chicken_one_love
+```
