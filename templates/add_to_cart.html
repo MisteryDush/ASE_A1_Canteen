@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Add to cart</title>
@@ -26,13 +27,31 @@
             justify-content: center;
             align-items: center;
         }
+
+        .timer {
+            font-size: 20px;
+        }
     </style>
 </head>
+
 <body>
-    <div class="success" style="background-image: url(../static/img/SuccessCircle.svg); background-size: cover; background-repeat: no-repeat;">
+    <div class="success"
+        style="background-image: url(../static/img/SuccessCircle.svg); background-size: cover; background-repeat: no-repeat;">
         <img src="../static/img/SuccessTick.svg" alt="">
     </div>
-    
+
     <p>{{ dish.name }} added!</p>
+    <p class="timer">Redirecting back in 3 seconds</p>
+
+    <script>
+        let timer = document.querySelector('.timer');
+        console.log(timer)
+        let seconds = 3;
+        setInterval(() => {
+            timer.innerText = `Redirecting back in ${--seconds} seconds`;
+        }, 1000);
+        setInterval(() => window.history.go(-1), seconds * 1000);
+    </script>
 </body>
+
 </html>
