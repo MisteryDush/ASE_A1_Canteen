@@ -1,6 +1,11 @@
 {% extends 'layout.html' %}
 {% block content %}
     <main>
-    Hi!
+    <a>
+        <button>Pending orders</button>
+    </a>
+    <a href="{{ url_for('add_dish', stall_id=stall_id) }}">
+        <button>Edit your stall</button>
+    </a>
     </main>
 {% endblock %}
