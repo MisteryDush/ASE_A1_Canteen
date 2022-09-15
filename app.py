@@ -100,6 +100,7 @@ def all_stalls():
 @login_required
 def add_dish(stall_id):
     """function for admins and stall owners to add dishes"""
+    print(current_user.stall_id)
     if check_role_admin() or (check_role_owner() and stall_id == current_user.stall_id):
         if request.method == "POST":
             file = request.files['file']
@@ -146,7 +147,7 @@ def login():
         if current_user.roles == 'Admin':
             return redirect(url_for('admin_dashboard'))
         elif current_user.roles == 'Stall owner':
-            return redirect(url_for(''))
+            return redirect(url_for('owner_dashboard'))
         return redirect(url_for('all_stalls'))
     return render_template('login.html', form='')
 
@@ -266,7 +267,8 @@ def make_order():
 @app.route('/owner-dashboard')
 @login_required
 def owner_dashboard():
-    return render_template('admin_dashboard.html')
+    if check_role_owner():
+        return render_template('owner_dashboard.html', stall_id=current_user.stall_id)
 
 
 def add_entry(name, filename, data):
@@ -299,8 +301,10 @@ def add_owner_db(owner):
 def check_role_admin():
     return True if current_user.roles == 'Admin' else False
 
+
 def check_role_owner():
     return True if current_user.roles == 'Stall owner' else False
+
 
 if __name__ == '__main__':
     app.run()
