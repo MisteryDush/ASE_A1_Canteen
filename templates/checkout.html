@@ -1,12 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Cart</title>
-</head>
-<body>
-{% for dish in cart %}
-    <a>{{ dish.name }}</a>
-{% endfor %}
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block content %}
+    <main>
+        <div>
+            {% for dish in cart %}
+                <form action="{{ url_for('delete_from_cart', dish_id=dish.dish_id) }}" method="post">
+                    <div style="display: flex; flex-direction: column">
+                        <a>{{ dish.name }}</a>
+                        <a>
+                            <button type="submit" value="Delete {{ dish.name }}">Delete item</button>
+                        </a>
+                    </div>
+                </form>
+            {% endfor %}
+        </div>
+        <form action="{{ url_for('make_order') }}" method="post">
+            <input type="submit" name="submit" value="Make an order">
+        </form>
+    </main>
+{% endblock %}

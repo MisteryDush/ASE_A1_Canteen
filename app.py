@@ -81,6 +81,11 @@ class User(UserMixin, db.Model):
         return self.user_id
 
 
+class PendingOrder(db.Model):
+    __tablename__ = 'orders'
+    order_id = db.Column(db.Integer, primary_key=True)
+
+
 """App functions"""
 
 
@@ -95,7 +100,7 @@ def all_stalls():
 @login_required
 def add_dish(stall_id):
     """function for admins and stall owners to add dishes"""
-    if check_role():
+    if check_role_admin() or (check_role_owner() and stall_id == current_user.stall_id):
         if request.method == "POST":
             file = request.files['file']
             data = file.read()
@@ -140,6 +145,8 @@ def login():
         login_user(user, False)
         if current_user.roles == 'Admin':
             return redirect(url_for('admin_dashboard'))
+        elif current_user.roles == 'Stall owner':
+            return redirect(url_for(''))
         return redirect(url_for('all_stalls'))
     return render_template('login.html', form='')
 
@@ -151,17 +158,18 @@ def logout():
     logout_user()
     return redirect(url_for('all_stalls'))
 
+
 @app.route('/admin-dashboard')
 @login_required
 def admin_dashboard():
-    if check_role():
+    if check_role_admin():
         return render_template('admin_dashboard.html')
 
 
 @app.route('/add', methods=["GET", "POST"])
 @login_required
 def add():
-    if check_role():
+    if check_role_admin():
         if request.method == 'POST':
             file = request.files['file']
             data = file.read()
@@ -175,7 +183,7 @@ def add():
 @app.route('/all')
 @login_required
 def all():
-    if check_role():
+    if check_role_admin():
         stalls = encode_img(Stall.query.all())
         return render_template('all.html', stalls=stalls)
     return redirect(url_for('all_stalls'))
@@ -198,7 +206,7 @@ def add_to_cart(picked_dish_id):
 @app.route('/delete-stall/<int:stall_id>')
 @login_required
 def delete_stall(stall_id):
-    if check_role():
+    if check_role_admin():
         stall = Stall.query.filter_by(stall_id=stall_id).first()
         db.session.delete(stall)
         db.session.commit()
@@ -215,7 +223,7 @@ def checkout():
 @login_required
 def add_owner():
     if request.method == 'POST':
-        if check_role():
+        if check_role_admin():
             username = request.form['username']
             password = generate_password_hash(request.form['password'])
             stall_id = int(request.form['chosen_stall'])
@@ -231,15 +239,38 @@ def add_owner():
 @app.route('/delete-owner/<owner_id>')
 @login_required
 def delete_owner(owner_id):
-    if check_role():
+    if check_role_admin():
         owner = User.query.filter_by(user_id=owner_id).first()
         db.session.delete(owner)
         db.session.commit()
         return redirect(url_for('add_owner'))
 
 
+@app.route('/delete-from-cart/<int:dish_id>', methods=['POST'])
+@login_required
+def delete_from_cart(dish_id):
+    for dish in current_user.cart:
+        if dish.dish_id == dish_id:
+            current_dish = dish
+    current_user.cart.remove(current_dish)
+    db.session.commit()
+    return redirect(url_for('checkout'))
+
+
+@app.route('/make-order', methods=['GET', 'POST'])
+@login_required
+def make_order():
+    return "Order made!"
+
+
+@app.route('/owner-dashboard')
+@login_required
+def owner_dashboard():
+    return render_template('admin_dashboard.html')
+
+
 def add_entry(name, filename, data):
-    if check_role():
+    if check_role_admin():
         entry = Stall(name, filename, data)
         db.session.add(entry)
         db.session.commit()
@@ -247,7 +278,7 @@ def add_entry(name, filename, data):
 
 
 def add_dish_db(name, price, stall, data, filename):
-    if check_role():
+    if check_role_admin():
         entry = Dish(name, filename, data, price, stall)
         db.session.add(entry)
         db.session.commit()
@@ -265,9 +296,11 @@ def add_owner_db(owner):
     db.session.commit()
 
 
-def check_role():
+def check_role_admin():
     return True if current_user.roles == 'Admin' else False
 
+def check_role_owner():
+    return True if current_user.roles == 'Stall owner' else False
 
 if __name__ == '__main__':
     app.run()
