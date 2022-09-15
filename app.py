@@ -84,6 +84,14 @@ class User(UserMixin, db.Model):
 class PendingOrder(db.Model):
     __tablename__ = 'orders'
     order_id = db.Column(db.Integer, primary_key=True)
+    stall_id = db.Column(db.Integer, db.ForeignKey('stalls.stall_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    dish_id = db.Column(db.Integer, db.ForeignKey('dishes.dish_id'))
+
+    def __init__(self, stall_id, user_id, dish_id):
+        self.stall_id = stall_id
+        self.user_id = user_id
+        self.dish_id = dish_id
 
 
 """App functions"""
@@ -261,6 +269,9 @@ def delete_from_cart(dish_id):
 @app.route('/make-order', methods=['GET', 'POST'])
 @login_required
 def make_order():
+    user_id = current_user.user_id
+    cart = current_user.cart
+    create_order(user_id, cart)
     return "Order made!"
 
 
@@ -304,6 +315,16 @@ def check_role_admin():
 
 def check_role_owner():
     return True if current_user.roles == 'Stall owner' else False
+
+
+def create_order(user_id, cart):
+    for dish in cart:
+        dish_id = dish.dish_id
+        stall_id = dish.stall_id
+        order = PendingOrder(stall_id, user_id, dish_id)
+        db.session.add(order)
+        db.session.commit()
+    current_user.cart.clear()
 
 
 if __name__ == '__main__':
