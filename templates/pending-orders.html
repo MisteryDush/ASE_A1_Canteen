@@ -1,0 +1,15 @@
+{% for user_id in orders %}
+    <div style="display: flex; flex-direction: column">
+        <a>Orders by {{ user_id }}</a>
+        <div style="display: flex; flex-direction: column">
+            {% for order in orders[user_id] %}
+                <a>{{ order.name }}</a>
+                <form action="{{ url_for('complete_order',order_id=order.order_id) }}">
+                    <a>
+                        <button>Complete!</button>
+                    </a>
+                </form>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
