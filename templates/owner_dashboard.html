@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
     <main>
-    <a>
+    <a href="{{ url_for('pending_orders', stall_id=stall_id) }}">
         <button>Pending orders</button>
     </a>
     <a href="{{ url_for('add_dish', stall_id=stall_id) }}">
