@@ -1,10 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Post order</title>
+    <title>Make order!</title>
+    <style>
+        body {
+            font-family: helvetica, Arial, sans-serif;
+            background-color: #1f2223;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #FFF;
+        }
+
+        body p {
+            font-size: 32px;
+        }
+
+        .success {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .timer {
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
-
+<div class="success"
+     style="background-image: url(../static/img/SuccessCircle.svg); background-size: cover; background-repeat: no-repeat;">
+    <img src="../static/img/SuccessTick.svg" alt="">
+</div>
+    <p>Order made!</p>
+    <p class="timer">Redirecting back in 3 seconds</p>
+<script>
+    let timer = document.querySelector('.timer');
+    console.log(timer)
+    let seconds = 3;
+    setInterval(() => {
+        timer.innerText = `Redirecting back in ${--seconds} seconds`;
+    }, 1000);
+    setInterval(() => window.history.go(-1), seconds * 1000);
+</script>
 </body>
 </html>
