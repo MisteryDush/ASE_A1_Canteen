@@ -70,7 +70,6 @@ class User(UserMixin, db.Model):
     password = db.Column(db.Text)
     roles = db.Column(db.String(length=25))
     stall_id = db.Column(db.Integer, db.ForeignKey('stalls.stall_id'), nullable=True)
-    cart = []
 
     def __init__(self, user_id, password, role):
         self.user_id = user_id
@@ -85,7 +84,7 @@ class PendingOrder(db.Model):
     __tablename__ = 'orders'
     order_id = db.Column(db.Integer, primary_key=True)
     stall_id = db.Column(db.Integer, db.ForeignKey('stalls.stall_id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    user_id = db.Column(db.Text, db.ForeignKey('users.user_id'))
     dish_id = db.Column(db.Integer, db.ForeignKey('dishes.dish_id'))
 
     def __init__(self, stall_id, user_id, dish_id):
@@ -93,6 +92,16 @@ class PendingOrder(db.Model):
         self.user_id = user_id
         self.dish_id = dish_id
 
+
+class Cart(db.Model):
+    __tablename__ = 'cart'
+    cart_id = db.Column(db.Integer, primary_key=True)
+    dish_id = db.Column(db.Integer, db.ForeignKey('dishes.dish_id'))
+    user_id = db.Column(db.Text, db.ForeignKey('users.user_id'))
+
+    def __init__(self, dish_id, user_id):
+        self.dish_id = dish_id
+        self.user_id = user_id
 
 """App functions"""
 
@@ -207,8 +216,10 @@ def load_user(user_id):
 @login_required
 def add_to_cart(picked_dish_id):
     dish = Dish.query.filter_by(dish_id=picked_dish_id).first()
-    current_user.cart.append(dish)
-    print(current_user.cart)
+    user_id = current_user.user_id
+    cart = Cart(picked_dish_id, user_id)
+    db.session.add(cart)
+    db.session.commit()
     return render_template('add_to_cart.html', dish=dish)
 
 
@@ -225,7 +236,7 @@ def delete_stall(stall_id):
 @app.route('/checkout')
 @login_required
 def checkout():
-    return render_template('checkout.html', cart=current_user.cart)
+    return render_template('checkout.html', cart=Cart.query.filter_by(user_id=current_user.user_id))
 
 
 @app.route('/add-owner', methods=['GET', 'POST'])
@@ -258,10 +269,9 @@ def delete_owner(owner_id):
 @app.route('/delete-from-cart/<int:dish_id>', methods=['POST'])
 @login_required
 def delete_from_cart(dish_id):
-    for dish in current_user.cart:
-        if dish.dish_id == dish_id:
-            current_dish = dish
-    current_user.cart.remove(current_dish)
+    user_id = current_user.user_id
+    order = Cart.query.filter_by(user_id=user_id).filter_by(dish_id=dish_id).first()
+    db.session.delete(order)
     db.session.commit()
     return redirect(url_for('checkout'))
 
@@ -270,7 +280,7 @@ def delete_from_cart(dish_id):
 @login_required
 def make_order():
     user_id = current_user.user_id
-    cart = current_user.cart
+    cart = Cart.query.filter_by(user_id=user_id).all()
     create_order(user_id, cart)
     return "Order made!"
 
@@ -280,6 +290,29 @@ def make_order():
 def owner_dashboard():
     if check_role_owner():
         return render_template('owner_dashboard.html', stall_id=current_user.stall_id)
+
+
+@app.route('/pending-orders/<int:stall_id>')
+@login_required
+def pending_orders(stall_id):
+    if check_role_owner():
+        orders = {}
+        ids = PendingOrder.query.filter_by(stall_id=stall_id).all()
+        for id in ids:
+            if not (id.user_id in orders.keys()):
+                orders[id.user_id] = [Dish.query.filter_by(dish_id=id.dish_id).first()]
+            else:
+                orders[id.user_id].append(Dish.query.filter_by(dish_id=id.dish_id).first())
+        print(orders)
+        return render_template('pending-orders.html', orders=orders)
+
+
+@app.route('/complete-order/<int:order_id>', methods=['POST'])
+@login_required
+def complete_order(order_id):
+    order = PendingOrder.query.filter_by(order_id=order_id).first()
+    db.session.delete(order)
+    db.session.commit()
 
 
 def add_entry(name, filename, data):
@@ -320,11 +353,11 @@ def check_role_owner():
 def create_order(user_id, cart):
     for dish in cart:
         dish_id = dish.dish_id
-        stall_id = dish.stall_id
+        stall_id = Dish.query.filter_by(dish_id=dish_id).first().stall_id
         order = PendingOrder(stall_id, user_id, dish_id)
         db.session.add(order)
+        db.session.delete(dish)
         db.session.commit()
-    current_user.cart.clear()
 
 
 if __name__ == '__main__':
