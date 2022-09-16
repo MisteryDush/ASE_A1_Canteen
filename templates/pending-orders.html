@@ -4,9 +4,9 @@
         <div style="display: flex; flex-direction: column">
             {% for order in orders[user_id] %}
                 <a>{{ order.name }}</a>
-                <form action="{{ url_for('complete_order',order_id=order.order_id) }}">
+                <form action="{{ url_for('complete_order',user_id=user_id, dish_id=order.dish_id) }}" method="post">
                     <a>
-                        <button>Complete!</button>
+                        <input type="submit" value="Complete!">
                     </a>
                 </form>
             {% endfor %}
