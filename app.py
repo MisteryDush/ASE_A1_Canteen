@@ -103,6 +103,7 @@ class Cart(db.Model):
         self.dish_id = dish_id
         self.user_id = user_id
 
+
 """App functions"""
 
 
@@ -282,7 +283,7 @@ def make_order():
     user_id = current_user.user_id
     cart = Cart.query.filter_by(user_id=user_id).all()
     create_order(user_id, cart)
-    return "Order made!"
+    return render_template('make-order.html')
 
 
 @app.route('/owner-dashboard')
@@ -307,12 +308,14 @@ def pending_orders(stall_id):
         return render_template('pending-orders.html', orders=orders)
 
 
-@app.route('/complete-order/<int:order_id>', methods=['POST'])
+@app.route('/complete-order/<user_id>/<int:dish_id>', methods=['POST'])
 @login_required
-def complete_order(order_id):
-    order = PendingOrder.query.filter_by(order_id=order_id).first()
-    db.session.delete(order)
-    db.session.commit()
+def complete_order(user_id, dish_id):
+    if request.method == 'POST':
+        order = PendingOrder.query.filter_by(user_id=user_id).filter_by(dish_id=dish_id).first()
+        db.session.delete(order)
+        db.session.commit()
+    return redirect(url_for('pending_orders', stall_id=current_user.stall_id))
 
 
 def add_entry(name, filename, data):
