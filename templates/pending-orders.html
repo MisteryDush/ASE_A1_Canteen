@@ -2,6 +2,7 @@
     <div style="display: flex; flex-direction: column">
         <a>Orders by {{ user_id }}</a>
         <div style="display: flex; flex-direction: column">
+        {% if orders %}
             {% for order in orders[user_id] %}
                 <a>{{ order.name }}</a>
                 <form action="{{ url_for('complete_order',user_id=user_id, dish_id=order.dish_id) }}" method="post">
@@ -10,6 +11,9 @@
                     </a>
                 </form>
             {% endfor %}
+        {% endif %}
+        {% else %}
+        No orders!
         </div>
     </div>
 {% endfor %}
