@@ -1,21 +1,22 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <main>
-        <div class="main__darkener">
-            <div class="container">
-                <h1>Admin Page</h1>
-                <div class="food-stalls" style="display: flex; flex-direction: column">
-                    {% for stall in stalls %}
-                        <h1>Stall {{ stall.stall_id }}</h1>
-                        <h2>{{ stall.name }}</h2>
-                        <img src="data:;base64,{{ stall.img }}" alt="{{ stall.filename }}" style="width: 400px">
-                        <a href="{{ url_for('add_dish', stall_id = stall.stall_id) }}"><input type="submit"
-                                                                                          value="Edit"></a>
-                        <a href="{{ url_for('delete_stall', stall_id = stall.stall_id) }}"><input type="submit" value="Delete"></a>
-                    {% endfor %}
+<main style="background-color: #1f2223; background-image: none;">
+    <div class="all-stalls__container">
+        {% for stall in stalls %}
+        <div class="card-stalls">
+            <div class="card-img" style="background-image: url('data:;base64,{{ stall.img }}');"></div>
+            <div class="card-body">
+                <h2>{{ stall.name }}</h2>
+                <div class="something">
+                    <a class="card-body__button" href="{{ url_for('add_dish', stall_id = stall.stall_id) }}"
+                        style="margin-right: 10px;">Edit</a>
+                    <a class="card-body__button danger"
+                        href="{{ url_for('delete_stall', stall_id = stall.stall_id) }}">Delete</a>
                 </div>
             </div>
         </div>
-    </main>
+        {% endfor %}
+    </div>
+</main>
 
 {% endblock %}

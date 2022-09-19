@@ -1,26 +1,22 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <main>
-        <!-- TODO -->
-        <!-- 1. Create a blur effect in background image -->
-        <!-- 2. Add animation and shadows to stalls items -->
+<main>
 
-        <div class="main__darkener">
-            <div class="container">
-                <h1>Canteen Food Stalls</h1>
-                <div class="food-stalls">
-                    {% for stall in stalls %}
-                            <a class="card" href="{{ url_for('menu', stall_id = stall.stall_id) }}">
-                                <div class="food-stalls__item" style="background-image: url('data:;base64,{{ stall.img }}');">
-                                    <h2>{{ stall.name }}</h2>
-                                    <div class="food-stalls__item_darkener"></div>
-                                </div>
-                            </a>
-                    {% endfor %}
-                </div>
+    <div class="main__darkener">
+        <div class="container">
+            <h1>Canteen Food Stalls</h1>
+            <div class="food-stalls">
+                {% for stall in stalls %}
+                <a class="card" href="{{ url_for('menu', stall_id = stall.stall_id) }}">
+                    <div class="food-stalls__item" style="background-image: url('data:;base64,{{ stall.img }}');">
+                        <h2>{{ stall.name }}</h2>
+                        <div class="food-stalls__item_darkener"></div>
+                    </div>
+                </a>
+                {% endfor %}
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
 {% endblock %}
-
