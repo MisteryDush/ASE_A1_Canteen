@@ -86,11 +86,13 @@ class PendingOrder(db.Model):
     stall_id = db.Column(db.Integer, db.ForeignKey('stalls.stall_id'))
     user_id = db.Column(db.Text, db.ForeignKey('users.user_id'))
     dish_id = db.Column(db.Integer, db.ForeignKey('dishes.dish_id'))
+    time = db.Column(db.DateTime)
 
-    def __init__(self, stall_id, user_id, dish_id):
+    def __init__(self, stall_id, user_id, dish_id, time):
         self.stall_id = stall_id
         self.user_id = user_id
         self.dish_id = dish_id
+        self.time = time
 
 
 class Cart(db.Model):
