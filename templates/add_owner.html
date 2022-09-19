@@ -13,8 +13,8 @@
 
         <div class="container">
             <label class="form__name" for="name">Add owner</label>
-            <input class="form__input" type="text" name="username" placeholder="Username" />
-            <input class="form__input" type="text" name="password" placeholder="Password" />
+            <input class="form__input" type="text" name="username" placeholder="Username" required />
+            <input class="form__input" type="text" name="password" placeholder="Password" required />
             <select class="form__select" name="chosen_stall" method="GET" action="/">
                 <option selected>Choose a stall</option>
                 {% for stall in stalls %}
