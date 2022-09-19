@@ -68,3 +68,17 @@ body {
     flex-wrap: wrap;
     margin-bottom: 15px;
 }
+
+.owners {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.owners__item form {
+    width: 230px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
