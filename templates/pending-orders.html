@@ -4,8 +4,9 @@
         <div style="display: flex; flex-direction: column">
         {% if orders %}
             {% for order in orders[user_id] %}
-                <a>{{ order.name }}</a>
-                <form action="{{ url_for('complete_order',user_id=user_id, dish_id=order.dish_id) }}" method="post">
+                <a>{{ order[0].name }}</a>
+                <a>Finish by {{ order[1].time() }}</a>
+                <form action="{{ url_for('complete_order',user_id=user_id, dish_id=order[0].dish_id) }}" method="post">
                     <a>
                         <input type="submit" value="Complete!">
                     </a>
