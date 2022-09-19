@@ -39,5 +39,5 @@ password: 123
 
 ```
 login: chicken_rice
-password: chicken_one_love
+password: 123
 ```
