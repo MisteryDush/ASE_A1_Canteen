@@ -14,6 +14,14 @@
             {% endfor %}
         </div>
         <form action="{{ url_for('make_order') }}" method="post">
+            <input type="time" name="time">
+            {% with message = get_flashed_messages() %}
+                {% if message %}
+                    <div class="alert alert-danger">
+                        {{ message[0] }}
+                    </div>
+                {% endif %}
+            {% endwith %}
             <input type="submit" name="submit" value="Make an order">
         </form>
     </main>
