@@ -1,4 +1,5 @@
 import base64
+from datetime import datetime
 import os
 
 from flask import Flask, render_template, request, redirect, url_for, flash
@@ -120,7 +121,6 @@ def all_stalls():
 @login_required
 def add_dish(stall_id):
     """function for admins and stall owners to add dishes"""
-    print(current_user.stall_id)
     if check_role_admin() or (check_role_owner() and stall_id == current_user.stall_id):
         if request.method == "POST":
             file = request.files['file']
@@ -156,12 +156,10 @@ def login():
         user = User.query.filter_by(user_id=request.form["username"]).first()
         pswd = request.form['password']
         if not user:
-            print("USer")
-            flash("Error!")
+            flash("This username does not exist", category='username_error')
             return render_template('login.html')
         elif not check_password_hash(user.password, pswd):
-            print("Password")
-            flash("Error!")
+            flash("Wrong password!", category='wrong_pass')
             return render_template('login.html')
         login_user(user, False)
         if current_user.roles == 'Admin':
@@ -250,7 +248,6 @@ def add_owner():
             username = request.form['username']
             password = generate_password_hash(request.form['password'])
             stall_id = int(request.form['chosen_stall'])
-            print(stall_id)
             user = User(username, password, 'Stall owner')
             user.stall_id = stall_id
             add_owner_db(user)
@@ -282,9 +279,14 @@ def delete_from_cart(dish_id):
 @app.route('/make-order', methods=['GET', 'POST'])
 @login_required
 def make_order():
+    today = datetime.today()
+    order_time = datetime(today.year, today.month, today.day, int(request.form['time'][0:2]), int(request.form['time'][3:]))
+    if order_time < datetime.now():
+        flash('Order time is less than current time')
+        return redirect(url_for('checkout'))
     user_id = current_user.user_id
     cart = Cart.query.filter_by(user_id=user_id).all()
-    create_order(user_id, cart)
+    create_order(user_id, cart, order_time)
     return render_template('make-order.html')
 
 
@@ -301,12 +303,11 @@ def pending_orders(stall_id):
     if check_role_owner():
         orders = {}
         ids = PendingOrder.query.filter_by(stall_id=stall_id).all()
-        for id in ids:
+        for i, id in enumerate(ids):
             if not (id.user_id in orders.keys()):
-                orders[id.user_id] = [Dish.query.filter_by(dish_id=id.dish_id).first()]
+                orders[id.user_id] = [[Dish.query.filter_by(dish_id=id.dish_id).first(), ids[i].time]]
             else:
-                orders[id.user_id].append(Dish.query.filter_by(dish_id=id.dish_id).first())
-        print(orders)
+                orders[id.user_id].append([Dish.query.filter_by(dish_id=id.dish_id).first(), ids[i].time])
         return render_template('pending-orders.html', orders=orders)
 
 
@@ -355,11 +356,12 @@ def check_role_owner():
     return True if current_user.roles == 'Stall owner' else False
 
 
-def create_order(user_id, cart):
+def create_order(user_id, cart, order_time):
     for dish in cart:
         dish_id = dish.dish_id
         stall_id = Dish.query.filter_by(dish_id=dish_id).first().stall_id
-        order = PendingOrder(stall_id, user_id, dish_id)
+        order = PendingOrder(stall_id, user_id, dish_id,
+                             datetime(year=order_time.year, month=order_time.month, day=order_time.day, hour=order_time.hour, minute=order_time.minute))
         db.session.add(order)
         db.session.delete(dish)
         db.session.commit()
