@@ -54,3 +54,17 @@ body {
 .form__submit:hover {
     background-image: linear-gradient(to bottom, #00478f 0, #002d5a 100%);;
 }
+
+.owners {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.owners__item form {
+    width: 230px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
