@@ -76,7 +76,7 @@ body {
 }
 
 .owners__item form {
-    width: 230px;
+    width: 220px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
