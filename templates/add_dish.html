@@ -1,31 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Add a dish</title>
+
+    <style>
+        body {
+            font-family: helvetica, Arial, sans-serif;
+            background-color: #1f2223;
+
+        }
+
+        .container {
+            font-size: inherit;
+            max-width: 1110px;
+            padding: 0 15px;
+            margin: 0 auto;
+            color: #FFF;
+        }
+
+        .container form {
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+            width: 60%;
+            align-items: center;
+        }
+
+        .form__name {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+
+        .form__input {
+            padding: 10px 15px;
+            font-size: 18px;
+            margin: 20px 0 0 0;
+        }
+
+        .form__file {
+            margin: 20px 0 0 0;
+            width: 220px;
+        }
+
+        .form__submit {
+            color: #FFF;
+            border: none;
+            letter-spacing: 1px;
+            padding: 10px 16px;
+            font-size: 18px;
+            line-height: 1.33;
+            margin: 20px 0 0 0;
+            width: 220px;
+            text-transform: uppercase;
+            background-image: linear-gradient(to bottom, #06c 0, #00478f 100%);
+            cursor: pointer;
+            margin-bottom: 25px;
+        }
+
+        .card-stalls__body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dishes {
+            display: column;
+        }
+
+        .dishes__item {
+            display: flex;
+            align-items: center;
+            gap: 70px;
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
+
 <body>
-<div style="display: flex; flex-direction: column">
-    <div style="display: flex; flex-direction: row">
-        {% for dish in dishes %}
-            <h1>Stall {{ dish.dish_id }}</h1>
-            <h2>{{ dish.name }}</h2>
-            <h2>{{ dish.price }}</h2>
-            <h2>{{ dish.stall_id }}</h2>
-            <img src="data:;base64,{{ dish.img }}" alt="{{ dish.filename }}" style="width: 400px">
-        {% endfor %}
+    <div class="container">
+        <form action="{{ request.path }}" method="post" enctype="multipart/form-data">
+            <label class="form__name" for="name">Name</label>
+            <label><input class="form__input" type="text" name="name" placeholder="Name" required /></label>
+            <label><input class="form__input" type="text" name="price" placeholder="Price" required /></label>
+            <input class="form__file" type="file" name="file">
+            <input class="form__submit" type="submit" value="Submit" />
+        </form>
+
+        <div class="dishes">
+            {% for dish in dishes %}
+            <div class="dishes__item">
+                <img src="data:;base64,{{ dish.img }}" alt="{{ dish.filename }}" style="width: 400px">
+                <h2>{{ dish.name }}</h2>
+                <h2>${{ dish.price }}</h2>
+            </div>
+            {% endfor %}
+        </div>
+
+
     </div>
-</div>
-<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
-    <label for="name">Name</label><br>
-    <label>
-        <input type="text" name="name" placeholder="Name" required/>
-    </label><br>
-    <label>
-        <input type="text" name="price" placeholder="Price" required/>
-    </label>
-    <input type="file" name="file" required>
-    <input type="submit" value="Submit"/>
-</form>
 </body>
+
 </html>
