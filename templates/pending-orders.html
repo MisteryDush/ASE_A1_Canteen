@@ -1,20 +1,119 @@
-{% for user_id in orders %}
-    <div style="display: flex; flex-direction: column">
-        <a>Orders by {{ user_id }}</a>
-        <div style="display: flex; flex-direction: column">
-        {% if orders %}
-            {% for order in orders[user_id] %}
-                <a>{{ order[0].name }}</a>
-                <a>Finish by {{ order[1].time() }}</a>
-                <form action="{{ url_for('complete_order',user_id=user_id, dish_id=order[0].dish_id) }}" method="post">
-                    <a>
-                        <input type="submit" value="Complete!">
-                    </a>
-                </form>
-            {% endfor %}
-        {% endif %}
-        {% else %}
-        No orders!
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Orders</title>
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #1f2223;
+            color: #FFF;
+        }
+
+        .container {
+            max-width: 1100px;
+            padding: 0 15px;
+            margin: 0 auto;
+        }
+
+        .pending-orders,
+        .pending-orders__name {
+            text-align: center;
+        }
+
+        .pending-orders {
+            font-size: 32px;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .pending-orders__name {
+            font-size: 20px;
+            margin: 20px 0;
+        }
+
+        .pending-orders__body {
+            border: 1px solid white;
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .body-pending__item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .body-pending__item:not(:last-child) {
+            margin-bottom: 20px;
+        }
+
+        .complete-button {
+            background-image: linear-gradient(to bottom, #00970f, #005c09);
+            border: none;
+            color: #FFF;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .no-orders {
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            row-gap: 30px;
+        }
+
+        .no-orders__icon {
+            font-size: 120px;
+            color: #8f1500;
+        }
+
+        .no-orders p {
+            font-size: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="pending-orders">Pending Orders</h1>
+
+        {% for user_id in orders %}
+        <div class="pending-orders__block">
+            <h2 class="pending-orders__name">Order by {{ user_id }}</h2>
+            {% if orders %}
+            <div class="pending-orders__body body-pending">
+                {% for order in orders[user_id] %}
+                <div class="body-pending__item">
+                    <p>{{ order[0].name }}</p>
+                    <p>Finish by {{ order[1].time() }}</p>
+                    <form action="{{ url_for('complete_order',user_id=user_id, dish_id=order[0].dish_id) }}"
+                        method="post">
+                        <button class="complete-button">Complete</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="no-orders">
+                <i class="no-orders__icon fa-regular fa-circle-xmark"></i>
+                <p>No Orders</p>
+            </div>
         </div>
+        {% endfor %}
+
+        <script src="https://kit.fontawesome.com/e80e54bf1e.js" crossorigin="anonymous"></script>
     </div>
-{% endfor %}
+</body>
+
+</html>

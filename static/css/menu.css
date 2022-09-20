@@ -57,7 +57,7 @@
 .card__image_text {
     text-align: center;
     line-height: 1.2;
-    width: 70px;
+    width: 100px;
     font-size: 20px;
     position: relative;
     z-index: 2;
