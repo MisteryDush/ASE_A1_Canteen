@@ -14,7 +14,7 @@
             {% endfor %}
         </div>
         <form action="{{ url_for('make_order') }}" method="post">
-            <input type="time" name="time">
+            <input type="time" name="time" required>
             {% with message = get_flashed_messages() %}
                 {% if message %}
                     <div class="alert alert-danger">

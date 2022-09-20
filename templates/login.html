@@ -14,8 +14,8 @@
             </div>
 
             <form action="{{ request.path }}" class="login-form" method="post">
-                <input class="login-form__login" type="text" name="username" placeholder="User Name e.g. jc123456">
-                <input class="login-form__password" type="password" name="password" placeholder="Password">
+                <input class="login-form__login" type="text" name="username" placeholder="User Name e.g. jc123456" required>
+                <input class="login-form__password" type="password" name="password" placeholder="Password" required>
                 <button class="login-form__button" type="submit">Log In</button>
 
                 <div class="login-form__helpers">
