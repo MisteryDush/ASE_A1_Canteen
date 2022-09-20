@@ -280,7 +280,8 @@ def delete_from_cart(dish_id):
 @login_required
 def make_order():
     today = datetime.today()
-    order_time = datetime(today.year, today.month, today.day, int(request.form['time'][0:2]), int(request.form['time'][3:]))
+    order_time = datetime(today.year, today.month, today.day, int(request.form['time'][0:2]),
+                          int(request.form['time'][3:]))
     if order_time < datetime.now():
         flash('Order time is less than current time')
         return redirect(url_for('checkout'))
@@ -361,11 +362,12 @@ def create_order(user_id, cart, order_time):
         dish_id = dish.dish_id
         stall_id = Dish.query.filter_by(dish_id=dish_id).first().stall_id
         order = PendingOrder(stall_id, user_id, dish_id,
-                             datetime(year=order_time.year, month=order_time.month, day=order_time.day, hour=order_time.hour, minute=order_time.minute))
+                             datetime(year=order_time.year, month=order_time.month, day=order_time.day,
+                                      hour=order_time.hour, minute=order_time.minute))
         db.session.add(order)
         db.session.delete(dish)
         db.session.commit()
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=False)
