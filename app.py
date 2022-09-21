@@ -237,7 +237,11 @@ def delete_stall(stall_id):
 @app.route('/checkout')
 @login_required
 def checkout():
-    return render_template('checkout.html', cart=Cart.query.filter_by(user_id=current_user.user_id))
+    cart = Cart.query.filter_by(user_id=current_user.user_id).all()
+    dishes = []
+    for dish in cart:
+        dishes.append(Dish.query.filter_by(dish_id=dish.dish_id).first())
+    return render_template('checkout.html', cart=dishes)
 
 
 @app.route('/add-owner', methods=['GET', 'POST'])
