@@ -7,7 +7,7 @@
             <form action="{{ url_for('delete_from_cart', dish_id=dish.dish_id) }}" method="post">
                 <div class="checkout-body">
                     <a>{{ dish.name }}</a>
-                    <img src="{{ data:;base64,{{ stall.img }}">
+                    <div class="card-img" style="background-image: url('data:;base64,{{ dish.img }}');"></div>
                     <button class="card-body__button danger" type="submit"
                         value="Delete {{ dish.name }}">Delete</button>
                 </div>
