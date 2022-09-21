@@ -1,30 +1,41 @@
 {% extends 'layout.html' %}
 {% block content %}
-<main style="background-color: #1f2223; background-image: none;">
+<main style="background-color: #1f2223; background-image: none; min-height: 500px;">
     <div class="container" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-        <div>
+        <div class="cart">
+            {% if cart %}
             {% for dish in cart %}
             <form action="{{ url_for('delete_from_cart', dish_id=dish.dish_id) }}" method="post">
                 <div class="checkout-body">
-                    <a>{{ dish.name }}</a>
-                    <div class="card-img" style="background-image: url('data:;base64,{{ dish.img }}');"></div>
+                    <div class="checkout-item"
+                        style="border: none; background-image: url('data:;base64,{{ dish.img }}');">
+                        <p>{{ dish.name }}</p>
+                        <p>${{ dish.price}}</p>
+                    </div>
                     <button class="card-body__button danger" type="submit"
                         value="Delete {{ dish.name }}">Delete</button>
                 </div>
             </form>
             {% endfor %}
-        </div>
-        <form action="{{ url_for('make_order') }}" method="post">
-            <input type="time" name="time" required>
-            {% with message = get_flashed_messages() %}
-            {% if message %}
-            <div class="alert alert-danger">
-                {{ message[0] }}
+            <form style="display: flex; flex-direction: column; row-gap: 30px;" action="{{ url_for('make_order') }}"
+                method="post">
+                <input class="checkout-time" type="time" name="time" required>
+                {% with message = get_flashed_messages() %}
+                {% if message %}
+                <p style="color: red; text-align: center;">{{ message[0] }}</p>
+                {% endif %}
+                {% endwith %}
+                <button style="width: 300px" class="card-body__button" type="submit" name="submit" value="button">Make
+                    an order</button>
+            </form>
+            {% else %}
+            <div class="checkout-empty">
+                <i class="no-orders__icon fa-regular fa-circle-xmark"></i>
+                <p>Cart is empty</p>
             </div>
             {% endif %}
-            {% endwith %}
-            <button class="card-body__button" type="submit" name="submit" value="button">Make an order</button>
-        </form>
+        </div>
     </div>
 </main>
+<script src="https://kit.fontawesome.com/e80e54bf1e.js" crossorigin="anonymous"></script>
 {% endblock %}
