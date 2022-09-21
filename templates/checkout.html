@@ -1,28 +1,30 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <main>
+<main style="background-color: #1f2223; background-image: none;">
+    <div class="container" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
         <div>
             {% for dish in cart %}
-                <form action="{{ url_for('delete_from_cart', dish_id=dish.dish_id) }}" method="post">
-                    <div style="display: flex; flex-direction: column">
-                        <a>{{ dish.name }}</a>
-                        <a>
-                            <button type="submit" value="Delete {{ dish.name }}">Delete item</button>
-                        </a>
-                    </div>
-                </form>
+            <form action="{{ url_for('delete_from_cart', dish_id=dish.dish_id) }}" method="post">
+                <div class="checkout-body">
+                    <a>{{ dish.name }}</a>
+                    <img src="{{ data:;base64,{{ stall.img }}">
+                    <button class="card-body__button danger" type="submit"
+                        value="Delete {{ dish.name }}">Delete</button>
+                </div>
+            </form>
             {% endfor %}
         </div>
         <form action="{{ url_for('make_order') }}" method="post">
             <input type="time" name="time" required>
             {% with message = get_flashed_messages() %}
-                {% if message %}
-                    <div class="alert alert-danger">
-                        {{ message[0] }}
-                    </div>
-                {% endif %}
+            {% if message %}
+            <div class="alert alert-danger">
+                {{ message[0] }}
+            </div>
+            {% endif %}
             {% endwith %}
-            <input type="submit" name="submit" value="Make an order">
+            <button class="card-body__button" type="submit" name="submit" value="button">Make an order</button>
         </form>
-    </main>
+    </div>
+</main>
 {% endblock %}

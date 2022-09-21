@@ -7,7 +7,7 @@
             <div class="card-img" style="background-image: url('data:;base64,{{ stall.img }}');"></div>
             <div class="card-body">
                 <h2>{{ stall.name }}</h2>
-                <div class="something">
+                <div class="bard-body__buttons">
                     <a class="card-body__button" href="{{ url_for('add_dish', stall_id = stall.stall_id) }}"
                         style="margin-right: 10px;">Edit</a>
                     <a class="card-body__button danger"

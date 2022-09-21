@@ -4,6 +4,7 @@
 @import url(footer.css);
 @import url(menu.css);
 @import url(all.css);
+@import url(checkout.css);
 
 body {
     font-family: Helvetica, Arial, sans-serif;

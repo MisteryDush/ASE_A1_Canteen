@@ -241,6 +241,7 @@ def checkout():
     dishes = []
     for dish in cart:
         dishes.append(Dish.query.filter_by(dish_id=dish.dish_id).first())
+    dishes = encode_img(dishes)
     return render_template('checkout.html', cart=dishes)
 
 

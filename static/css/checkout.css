@@ -1,0 +1,8 @@
+.checkout-body {
+    display: flex;
+    align-items: center;
+}
+
+.checkout-body a {
+    font-size: 20px;
+}
