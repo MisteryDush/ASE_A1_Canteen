@@ -288,7 +288,7 @@ def make_order():
     order_time = datetime(today.year, today.month, today.day, int(request.form['time'][0:2]),
                           int(request.form['time'][3:]))
     if order_time < datetime.now():
-        flash('Order time is less than current time')
+        flash('Order time is less than current time', category='time')
         return redirect(url_for('checkout'))
     user_id = current_user.user_id
     cart = Cart.query.filter_by(user_id=user_id).all()
