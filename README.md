@@ -28,16 +28,30 @@ login: admin
 password: admin
 ```
 
-#### Login and password for student
+#### Login and password for students
 
+#### jc790031
 ```
 login: jc7900031
 password: 123
 ```
 
-#### Login and password for stall owner
+#### jc000111
+```
+login: jc000111
+password: 123
+```
 
+#### Login and password for stall owners
+
+#### Chicken rice stall
 ```
 login: chicken_rice
+password: 123
+```
+
+#### Japanese stall
+```
+login: japanese
 password: 123
 ```
