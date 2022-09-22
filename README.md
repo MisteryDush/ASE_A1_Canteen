@@ -4,7 +4,7 @@
 
 #### Install `virtualenv`
 ```
-pip install virtualenv venv
+pip install virtualenv
 ```
 #### Run `virtualenv` and create a virtual environment
 ```
