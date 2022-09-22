@@ -336,7 +336,7 @@ def add_entry(name, filename, data):
 
 
 def add_dish_db(name, price, stall, data, filename):
-    if check_role_admin():
+    if check_role_admin() or check_role_owner():
         entry = Dish(name, filename, data, price, stall)
         db.session.add(entry)
         db.session.commit()
